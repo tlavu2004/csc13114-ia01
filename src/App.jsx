@@ -14,21 +14,14 @@ function Board({ xIsNext, squares, onPlay }) {
       return;
     }
     const nextSquares = squares.slice();
-    if (xIsNext) {
-      nextSquares[i] = 'X';
-    } else {
-      nextSquares[i] = 'O';
-    }
+    nextSquares[i] = xIsNext ? 'X' : 'O';
     onPlay(nextSquares);
   }
 
   const winner = calculateWinner(squares);
-  let status;
-  if (winner) {
-    status = 'Winner: ' + winner;
-  } else {
-    status = 'Next player: ' + (xIsNext ? 'X' : 'O');
-  }
+  const status = winner
+    ? 'Winner: ' + winner
+    : 'Next player: ' + (xIsNext ? 'X' : 'O');
 
   return (
     <>
@@ -69,12 +62,10 @@ export default function Game() {
   }
 
   const moves = history.map((squares, move) => {
-    let description;
-    if (move > 0) {
-      description = 'Go to move #' + move;
-    } else {
-      description = 'Go to game start';
-    }
+    const description = move > 0
+      ? 'Go to move #' + move
+      : 'Go to game start';
+
     return (
       <li key={move}>
         <button onClick={() => jumpTo(move)}>{description}</button>
