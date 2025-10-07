@@ -12,9 +12,11 @@ function Square({ value, onSquareClick, highlight }) {
   );
 }
 
+const BOARD_SIZE = 3;
+
 function Board({ xIsNext, squares, onPlay }) {
   function handleClick(i) {
-    if (calculateWinner(squares) || squares[i]) {
+    if (calculateWinner(squares, BOARD_SIZE) || squares[i]) {
       return;
     }
     const nextSquares = squares.slice();
@@ -22,7 +24,7 @@ function Board({ xIsNext, squares, onPlay }) {
     onPlay(nextSquares, i);
   }
 
-  const winnerInfo = calculateWinner(squares);
+  const winnerInfo = calculateWinner(squares, BOARD_SIZE);
   const winner = winnerInfo ? winnerInfo.winner : null;
   const winningLine = winnerInfo ? winnerInfo.line : [];
   let status;
@@ -37,10 +39,10 @@ function Board({ xIsNext, squares, onPlay }) {
   return (
     <>
       <div className="status-bar">{status}</div>
-      {Array(3).fill(null).map((_, row) => (
+      {Array(BOARD_SIZE).fill(null).map((_, row) => (
         <div className="board-row" key={row}>
-          {Array(3).fill(null).map((_, col) => {
-            const index = row * 3 + col;
+          {Array(BOARD_SIZE).fill(null).map((_, col) => {
+            const index = row * BOARD_SIZE + col;
             return (
               <Square
                 key={col}
@@ -58,12 +60,12 @@ function Board({ xIsNext, squares, onPlay }) {
 
 export default function Game() {
   const [history, setHistory] = useState([{
-    squares: Array(9).fill(null),
+    squares: Array(BOARD_SIZE * BOARD_SIZE).fill(null),
     moveIndex: null
   }]);
   const [currentMove, setCurrentMove] = useState(0);
   const [isAscending, setIsAscending] = useState(true);
-  const xIsNext = currentMove % 2 === 0;
+  const xIsNext = history.length % 2 === 0;
   const currentSquares = history[currentMove].squares;
 
   function handlePlay(nextSquares, moveIndex) {
@@ -85,10 +87,10 @@ export default function Game() {
 
   const moves = history.map((step, move) => {
     let description;
-    if (move > 0) {
+    if (move > 0 && Number.isInteger(step.moveIndex) && step.moveIndex >= 0) {
       const index = step.moveIndex;
-      const row = Math.floor(index / 3) + 1;
-      const col = (index % 3) + 1;
+      const row = Math.floor(index / BOARD_SIZE) + 1;
+      const col = (index % BOARD_SIZE) + 1;
       description = `Go to move #${move} (${row}, ${col})`;
     } else {
       description = 'Go to game start';
@@ -135,28 +137,31 @@ export default function Game() {
   );
 }
 
-function calculateWinner(squares) {
-  const lines = [
-    [0, 1, 2],
-    [3, 4, 5],
-    [6, 7, 8],
-    [0, 3, 6],
-    [1, 4, 7],
-    [2, 5, 8],
-    [0, 4, 8],
-    [2, 4, 6],
-  ];
-  for (let i = 0; i < lines.length; i++) {
-    const [a, b, c] = lines[i];
-    if (squares[a] &&
-      squares[a] === squares[b] &&
-      squares[a] === squares[c]
-    ) {
-      return {
-        winner: squares[a],
-        line: lines[i]
-      };
+function calculateWinner(squares, boardSize = 3) {
+  const lines = [];
+
+  // Rows
+  for (let r = 0; r < boardSize; r++) {
+    const row = Array.from({ length: boardSize }, (_, c) => r * boardSize + c);
+    lines.push(row);
+  }
+
+  // Columns
+  for (let c = 0; c < boardSize; c++) {
+    const col = Array.from({ length: boardSize }, (_, r) => r * boardSize + c);
+    lines.push(col);
+  }
+
+  // Diagonals
+  lines.push(Array.from({ length: boardSize }, (_, i) => i * boardSize + i));
+  lines.push(Array.from({ length: boardSize }, (_, i) => i * boardSize + (boardSize - 1 - i)));
+
+  for (let line of lines) {
+    const [first, ...rest] = line;
+    if (squares[first] && rest.every(idx => squares[idx] === squares[first])) {
+      return { winner: squares[first], line };
     }
   }
   return null;
 }
+
