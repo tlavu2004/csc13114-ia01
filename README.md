@@ -30,7 +30,7 @@ The project fulfills all the requirements from the assignment.
 
 ## Live Demo
 
-[Play Tic-Tac-Toe Online](...)
+[Run Tic-Tac-Toe Online](https://csc13114-ia01-22120443.vercel.app/)
 
 ---
 
@@ -39,7 +39,7 @@ The project fulfills all the requirements from the assignment.
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/yourusername/tic-tac-toe-react.git
+git clone https://github.com/tlavu2004/csc13114-ia01.git
 cd tic-tac-toe-react
 ```
 
