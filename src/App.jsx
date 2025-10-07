@@ -3,7 +3,7 @@ import './App.css';
 
 function Square({ value, onSquareClick, highlight }) {
   return (
-    <button 
+    <button
       className={`square ${highlight ? 'highlight' : ''}`}
       onClick={onSquareClick}
     >
@@ -62,7 +62,7 @@ function Board({ xIsNext, squares, onPlay }) {
 export default function Game() {
   const [history, setHistory] = useState([{
     squares: Array(9).fill(null),
-    move: [null]
+    moveIndex: [null]
   }]);
   const [currentMove, setCurrentMove] = useState(0);
   const [isAscending, setIsAscending] = useState(true);
