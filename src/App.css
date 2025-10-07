@@ -4,3 +4,8 @@
   padding: 4px 6px;
   display: inline-block;
 }
+
+.square.highlight {
+  background-color: yellow;
+  font-weight: bold;
+}
