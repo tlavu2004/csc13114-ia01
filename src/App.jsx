@@ -36,10 +36,7 @@ function Board({ xIsNext, squares, onPlay }) {
 
   return (
     <>
-      <div className="status">
-        {status}
-      </div>
-
+      <div className="status-bar">{status}</div>
       {Array(3).fill(null).map((_, row) => (
         <div className="board-row" key={row}>
           {Array(3).fill(null).map((_, col) => {
@@ -62,7 +59,7 @@ function Board({ xIsNext, squares, onPlay }) {
 export default function Game() {
   const [history, setHistory] = useState([{
     squares: Array(9).fill(null),
-    moveIndex: [null]
+    moveIndex: null
   }]);
   const [currentMove, setCurrentMove] = useState(0);
   const [isAscending, setIsAscending] = useState(true);
@@ -117,18 +114,22 @@ export default function Game() {
   const sortedMoves = isAscending ? moves : [...moves].reverse();
 
   return (
-    <div className="game">
-      <div className="game-board">
-        <Board xIsNext={xIsNext}
-        squares={currentSquares}
-        onPlay={handlePlay} />
-      </div>
+    <div className='game-container'>
+      <div className="game">
+        <div className="game-board">
+          <Board 
+            xIsNext={xIsNext}
+            squares={currentSquares}
+            onPlay={handlePlay} 
+          />
+        </div>
 
-      <div className="game-info">
-        <button onClick={toggleSortOrder}>
-          Sort {isAscending ? 'Descending' : 'Ascending'}
-        </button>
-        <ol>{sortedMoves}</ol>
+        <div className="game-info">
+          <button className="toggle-sort" onClick={toggleSortOrder}>
+            Sort {isAscending ? 'Descending' : 'Ascending'}
+          </button>
+          <ol>{sortedMoves}</ol>
+        </div>
       </div>
     </div>
   );
