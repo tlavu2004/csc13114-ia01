@@ -87,7 +87,7 @@ export default function Game() {
 
   const moves = history.map((step, move) => {
     let description;
-    if (move > 0) {
+    if (move > 0 && Number.isInteger(step.moveIndex) && step.moveIndex >= 0) {
       const index = step.moveIndex;
       const row = Math.floor(index / BOARD_SIZE) + 1;
       const col = (index % BOARD_SIZE) + 1;
