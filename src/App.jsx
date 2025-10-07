@@ -22,9 +22,9 @@ function Board({ xIsNext, squares, onPlay }) {
     onPlay(nextSquares, i);
   }
 
-  const winningInfo = calculateWinner(squares);
-  const winner = winningInfo ? winningInfo.winner : null;
-  const winningLine = winningInfo ? winningInfo.line : [];
+  const winnerInfo = calculateWinner(squares);
+  const winner = winnerInfo ? winnerInfo.winner : null;
+  const winningLine = winnerInfo ? winnerInfo.line : [];
   let status;
   if (winner) {
     status = 'Winner: ' + winner;
